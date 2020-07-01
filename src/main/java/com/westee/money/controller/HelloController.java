@@ -1,4 +1,4 @@
-package com.westee.money.controllers;
+package com.westee.money.controller;
 
 import com.westee.money.model.Greeting;
 import org.springframework.web.bind.annotation.*;
