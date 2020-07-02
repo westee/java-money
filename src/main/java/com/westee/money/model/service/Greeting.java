@@ -1,4 +1,4 @@
-package com.westee.money.model;
+package com.westee.money.model.service;
 
 public class Greeting {
     private final long id;

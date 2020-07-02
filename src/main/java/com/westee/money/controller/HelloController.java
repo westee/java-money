@@ -1,6 +1,6 @@
 package com.westee.money.controller;
 
-import com.westee.money.model.Greeting;
+import com.westee.money.model.service.Greeting;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.atomic.AtomicLong;
