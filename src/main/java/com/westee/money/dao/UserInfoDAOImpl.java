@@ -1,6 +1,5 @@
 package com.westee.money.dao;
 
-import com.westee.money.dao.UserInfoDAO;
 import com.westee.money.dao.mapper.UserInfoMapper;
 import com.westee.money.model.persistence.UserInfo;
 import lombok.RequiredArgsConstructor;
@@ -8,9 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+//@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserInfoDAOImpl implements UserInfoDAO {
     private final UserInfoMapper userInfoMapper;
+
+    @Autowired
+    public UserInfoDAOImpl(UserInfoMapper userInfoMapper) {
+        this.userInfoMapper = userInfoMapper;
+    }
 
     @Override
     public UserInfo getUserInfoById(Long id) {

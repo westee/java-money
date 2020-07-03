@@ -2,7 +2,9 @@ package com.westee.money.converter.persistence2common;
 
 import com.google.common.base.Converter;
 import com.westee.money.model.persistence.UserInfo;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserInfoP2CConverter extends Converter<UserInfo, com.westee.money.model.common.UserInfo> {
     @Override
     protected com.westee.money.model.common.UserInfo doForward(UserInfo userInfo) {
