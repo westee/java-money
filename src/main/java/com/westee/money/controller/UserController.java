@@ -1,6 +1,7 @@
 package com.westee.money.controller;
 
 import com.westee.money.converter.common2service.UserInfoC2SConverter;
+import com.westee.money.exception.InvalidParameterException;
 import com.westee.money.manager.UserInfoManager;
 import com.westee.money.model.service.UserInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,9 @@ public class UserController {
     @GetMapping("/{id}")
     public UserInfo getUserInfoByUserId(@PathVariable("id") Long userId){
         log.debug("Get user info by user id {}", userId);
+        if(userId  == null || userId <= 0L){
+            throw new InvalidParameterException(String.format("The user id %s is invalid", userId));
+        }
         val userInfo = userInfoManager.getUserInfoByUserId(userId);
         return userInfoConverter.convert(userInfo);
     }
