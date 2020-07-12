@@ -22,7 +22,7 @@ public class UserInfoDAOImpl implements UserInfoDAO {
     }
 
     @Override
-    public void createNewUser(String username, String password) {
-
+    public UserInfo createNewUser(String username, String password) {
+        return null;
     }
 }

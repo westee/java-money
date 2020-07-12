@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserInfoP2CConverter extends Converter<UserInfo, com.westee.money.model.common.UserInfo> {
     @Override
-    protected com.westee.money.model.common.UserInfo doForward(UserInfo userInfo) {
+    public com.westee.money.model.common.UserInfo doForward(UserInfo userInfo) {
         return com.westee.money.model.common.UserInfo.builder()
                 .id(userInfo.getId())
                 .username(userInfo.getUsername())
@@ -16,7 +16,7 @@ public class UserInfoP2CConverter extends Converter<UserInfo, com.westee.money.m
     }
 
     @Override
-    protected UserInfo doBackward(com.westee.money.model.common.UserInfo userInfo) {
+    public UserInfo doBackward(com.westee.money.model.common.UserInfo userInfo) {
         return UserInfo.builder()
                 .id(userInfo.getId())
                 .username(userInfo.getUsername())
