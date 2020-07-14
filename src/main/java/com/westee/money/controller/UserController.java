@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Objects;
+import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("v1.0/users")
@@ -25,14 +25,13 @@ public class UserController {
         this.userInfoC2SConverter = userInfoConverter;
     }
 
-    @ResponseBody
-    @GetMapping("/{id}")
-    public ResponseEntity<UserInfo> getUserInfoByUserId(@PathVariable("id") Long userId){
+    @GetMapping(path = "/{id}", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<UserInfo> getUserInfoByUserId(@PathVariable("id") @NotNull     Long userId){
         log.debug("Get user info by user id {}", userId);
         if(userId  == null || userId <= 0L){
             throw new InvalidParameterException(String.format("User %s was not found", userId));
         }
         val userInfo = userInfoManager.getUserInfoByUserId(userId);
-        return ResponseEntity.ok(Objects.requireNonNull(userInfoC2SConverter.convert(userInfo)));
+        return ResponseEntity.ok(userInfoC2SConverter.convert(userInfo));
     }
 }

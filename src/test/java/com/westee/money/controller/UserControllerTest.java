@@ -4,7 +4,6 @@ import static org.mockito.ArgumentMatchers.anyLong;
 
 import com.westee.money.converter.common2service.UserInfoC2SConverter;
 import com.westee.money.exception.GlobalExceptionHandler;
-import com.westee.money.exception.ResourceNotFoundException;
 import com.westee.money.manager.UserInfoManager;
 import com.westee.money.model.common.UserInfo;
 import lombok.val;
@@ -15,14 +14,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,14 +37,14 @@ public class UserControllerTest {
     private UserController userController;
 
     @BeforeEach
-    void setup(){
+    void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(userController)
                 .setControllerAdvice(new GlobalExceptionHandler())
                 .build();
     }
 
     @AfterEach
-    void clear(){
+    void clear() {
         reset(userInfoManager);
         reset(userInfoC2SConverter);
     }
@@ -73,13 +69,12 @@ public class UserControllerTest {
                 .password(password)
                 .build();
 
-
         doReturn(userInfoInCommon).when(userInfoManager).getUserInfoByUserId(anyLong());
 
         doReturn(userInfo).when(userInfoC2SConverter).convert(userInfoInCommon);
 
         // Act && Assert
-        mockMvc.perform(get("/v1.0/users/" + userId))
+        mockMvc.perform(get("/v1.0/users/" + userId).contentType("application/json"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(content().string("{\"id\":100,\"username\":\"hardcore\",\"password\":\"hardcore\"}"));
@@ -89,15 +84,21 @@ public class UserControllerTest {
     }
 
     @Test
-    void getUserInfoByUserIdTestWithInvalidParam() throws Exception {
-        val userId = -100L;
-        doThrow(new ResourceNotFoundException(String.format("User %s was not found", userId)))
-                .when(userInfoManager)
-                .getUserInfoByUserId(anyLong());
+    public void getUserInfoByUserIdTestWithInvalidParam() throws Exception {
+        val userId = -1L;
+//        doThrow(new ResourceNotFoundException(String.format("User %s was not found", userId)))
+//                .when(userInfoManager)
+//                .getUserInfoByUserId(anyLong());
 
-        mockMvc.perform(get("/v1.0/users/" + userId))
-                .andExpect(status().isBadRequest())
+        mockMvc.perform(get("/v1.0/users/" + userId)
+                .contentType("application/json")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(content().string("123"));
+                .andExpect(content().string(
+                        "{\"code\":\"INVALID_PARAMETER\",\"errorType\":\"Client\",\"message\":\"User -1 was not found\",\"statusCode\":400}"
+                        ));
+
+        verify(userInfoManager, never()).getUserInfoByUserId(anyLong());
     }
 }
