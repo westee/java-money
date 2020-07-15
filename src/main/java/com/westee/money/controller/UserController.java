@@ -26,9 +26,9 @@ public class UserController {
     }
 
     @GetMapping(path = "/{id}", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<UserInfo> getUserInfoByUserId(@PathVariable("id") @NotNull     Long userId){
+    public ResponseEntity<UserInfo> getUserInfoByUserId(@PathVariable("id") @NotNull Long userId) {
         log.debug("Get user info by user id {}", userId);
-        if(userId  == null || userId <= 0L){
+        if (userId == null || userId <= 0L) {
             throw new InvalidParameterException(String.format("User %s was not found", userId));
         }
         val userInfo = userInfoManager.getUserInfoByUserId(userId);

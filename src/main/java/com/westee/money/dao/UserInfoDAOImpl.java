@@ -2,7 +2,6 @@ package com.westee.money.dao;
 
 import com.westee.money.dao.mapper.UserInfoMapper;
 import com.westee.money.model.persistence.UserInfo;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
