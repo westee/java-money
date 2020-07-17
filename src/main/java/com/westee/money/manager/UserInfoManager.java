@@ -9,4 +9,12 @@ public interface UserInfoManager {
      * @return UserInfo
      */
     UserInfo getUserInfoByUserId(Long userId);
+
+    /**
+     * 用户登录
+     * @param username
+     * @param password
+     * @return
+     */
+    UserInfo login(String username, String password);
 }
