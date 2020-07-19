@@ -11,6 +11,13 @@ public interface UserInfoManager {
     UserInfo getUserInfoByUserId(Long userId);
 
     /**
+     * 通过用户id获取用户信息
+     * @param username
+     * @return UserInfo
+     */
+    UserInfo getUserInfoByUsername(String username);
+
+    /**
      * 用户登录
      * @param username
      * @param password
