@@ -15,6 +15,7 @@ public class UserInfoC2SConverter extends Converter<UserInfo, com.westee.money.m
         return com.westee.money.model.service.UserInfo.builder()
                 .id(userInfo.getId())
                 .username(userInfo.getUsername())
+                .password(userInfo.getPassword())
                 .build();
     }
 

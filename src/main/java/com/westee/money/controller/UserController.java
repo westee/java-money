@@ -35,4 +35,13 @@ public class UserController {
         val userInfo = userInfoManager.getUserInfoByUserId(userId);
         return ResponseEntity.ok(Objects.requireNonNull(userInfoC2SConverter.convert(userInfo)));
     }
+
+    @PostMapping
+    public ResponseEntity<UserInfo> register(@RequestParam("username") String username,
+                                             @RequestParam("password") String password){
+        UserInfo userInfo = userInfoC2SConverter.doForward(
+                userInfoManager.createUser(username, password)
+        );
+        return ResponseEntity.ok(userInfo);
+    }
 }

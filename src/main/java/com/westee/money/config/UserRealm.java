@@ -3,9 +3,11 @@ package com.westee.money.config;
 import com.westee.money.manager.UserInfoManager;
 import com.westee.money.model.common.UserInfo;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +16,9 @@ public class UserRealm extends AuthorizingRealm {
     private final UserInfoManager userInfoManager;
 
     @Autowired
-    public UserRealm(UserInfoManager userInfoManager) {
+    public UserRealm(UserInfoManager userInfoManager,
+                     HashedCredentialsMatcher hashedCredentialsMatcher) {
+        super(hashedCredentialsMatcher);
         this.userInfoManager = userInfoManager;
     }
 
@@ -26,14 +30,11 @@ public class UserRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         String username = (String) token.getPrincipal();
-        String password = new String((char[]) token.getCredentials());
-
         UserInfo userInfoByUsername = userInfoManager.getUserInfoByUsername(username);
 
-        if (!password.equals(userInfoByUsername.getPassword())) {
-            throw new UnknownAccountException(String.format("the password is invalid for %s", username));
-        }
         return new SimpleAuthenticationInfo(userInfoByUsername.getUsername(),
-                userInfoByUsername.getPassword(), this.getName());
+                userInfoByUsername.getPassword(),
+                ByteSource.Util.bytes(userInfoByUsername.getSalt()),
+                this.getName());
     }
 }

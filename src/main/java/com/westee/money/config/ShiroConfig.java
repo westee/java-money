@@ -1,5 +1,6 @@
 package com.westee.money.config;
 
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
@@ -29,5 +30,15 @@ public class ShiroConfig {
         shiroFilterMap.put("/**", "authc");
 
         return shiroFilterFactoryBean;
+    }
+
+    @Bean
+    public HashedCredentialsMatcher hashedCredentialsMatcher(){
+        HashedCredentialsMatcher matcher = new HashedCredentialsMatcher();
+        matcher.setHashAlgorithmName("SHA-256");
+        matcher.setHashIterations(2);
+        matcher.setHashSalted(true);
+        matcher.setStoredCredentialsHexEncoded(false);
+        return matcher;
     }
 }
