@@ -2,6 +2,7 @@ package com.westee.money.controller;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.westee.money.converter.common2service.UserInfoC2SConverter;
 import com.westee.money.exception.GlobalExceptionHandler;
 import com.westee.money.manager.UserInfoManager;
@@ -77,7 +78,10 @@ public class UserControllerTest {
         mockMvc.perform(get("/v1.0/users/" + userId).contentType("application/json"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(content().string("{\"id\":100,\"username\":\"hardcore\",\"password\":\"hardcore\"}"));
+                .andExpect(content().string(
+//                        "{\"id\":100,\"username\":\"hardcore\",\"password\":\"hardcore\"}"
+                        new ObjectMapper().writeValueAsString(userInfo)
+                ));
 
         verify(userInfoManager).getUserInfoByUserId(anyLong());
         verify(userInfoC2SConverter).convert(userInfoInCommon);

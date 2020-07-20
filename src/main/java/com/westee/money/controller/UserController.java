@@ -36,12 +36,11 @@ public class UserController {
         return ResponseEntity.ok(Objects.requireNonNull(userInfoC2SConverter.convert(userInfo)));
     }
 
-    @PostMapping
-    public ResponseEntity<UserInfo> register(@RequestParam("username") String username,
-                                             @RequestParam("password") String password){
-        UserInfo userInfo = userInfoC2SConverter.doForward(
-                userInfoManager.createUser(username, password)
+    @PostMapping(produces = "application/json", consumes = "application/json")
+    public ResponseEntity<UserInfo> register(@RequestBody UserInfo userInfo){
+        UserInfo userInfoS = userInfoC2SConverter.doForward(
+                userInfoManager.createUser(userInfo.getUsername(), userInfo.getPassword())
         );
-        return ResponseEntity.ok(userInfo);
+        return ResponseEntity.ok(userInfoS);
     }
 }
